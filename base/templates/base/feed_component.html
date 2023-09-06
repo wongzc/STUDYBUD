@@ -1,4 +1,9 @@
 {% for room in rooms %}
+<style>
+        b:hover {
+            cursor: pointer;
+        }
+    </style>
 <div class="roomListRoom">
     <div class="roomListRoom__header">
       <a href="{% url 'user-profile' room.host.id %}" class="roomListRoom__author">
@@ -38,18 +43,32 @@
         {{room.participants.all.count}}
       </a>
       {% if request.user.is_authenticated %}
-      <form method="POST" action="" class="roomListRoom__joined">
-        {% csrf_token %}
-        <input class="btn btn--main" type="submit" value="Like" name="like"/>
-        <input type="hidden" name="room_id" value="{{ room.id }}">
-      {{room.likeroom.all.count}}
-      </form>
+
+        <b class="likeroombutton" type="submit" value="Like" name="like" data-catid="{{ room.id }}">Like</b>
+      <a id="message{{room.id}}">{{room.likeroom.all.count}}</a>
+
       {% endif %}
     </div>
       <p class="roomListRoom__topic">{{room.topic.name}}</p>
     </div>
   </div>
   {% endfor %} 
-  
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+  <script type="text/javascript">
+    $('.likeroombutton').click(function(){
+      var catid;
+      catid= $(this).attr("data-catid");
+      $.ajax(
+        {
+          type:"GET",
+          url:"/likeroom",
+          data:{room_id:catid},
+          success: function(data)
+          {
+            $( '#message'+ catid ).text(data);
+          }
+        })
+    })
+  </script>
 
 

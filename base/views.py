@@ -29,12 +29,6 @@ def home(request):
         Q(room__topic__name__icontains=q)
     )[:5]
 
-    if (request.method=="POST" and request.POST.get('like')):
-        room_id=request.POST.get('room_id')
-        room=Room.objects.get(id=room_id)
-        room.likeroom.add(request.user)
-        return redirect('home')
-    
     context= {
         'rooms':rooms, 
         'topics':topics,
@@ -42,6 +36,8 @@ def home(request):
         'room_messages':room_messages,
         'total_room_count':total_room_count
         }
+
+    
     return render(request, 'base/home.html',context)
 
 def room(request, pk):
@@ -223,3 +219,11 @@ def activityPage(request):
         'room_messages':room_messages
              }
     return render(request, 'base/activity.html', context)
+
+def likeRoom(request):
+    if request.method=='GET':
+        room_id=request.GET['room_id']
+        room=Room.objects.get(id=room_id)
+        room.likeroom.add(request.user)
+        likecount=room.likeroom.count()
+        return HttpResponse(likecount)
