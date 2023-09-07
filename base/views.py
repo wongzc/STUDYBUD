@@ -7,7 +7,7 @@ from .forms import RoomForm, UserForm, MyUserCreationForm
 #from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 #rooms =[
 #    {'id':1, 'name':'pythonnn'},
 #    {'id':2, 'name':'haha'},
@@ -34,7 +34,7 @@ def home(request):
         'topics':topics,
         'room_count':room_count,
         'room_messages':room_messages,
-        'total_room_count':total_room_count
+        'total_room_count':total_room_count,
         }
 
     
@@ -221,9 +221,25 @@ def activityPage(request):
     return render(request, 'base/activity.html', context)
 
 def likeRoom(request):
+    
     if request.method=='GET':
         room_id=request.GET['room_id']
         room=Room.objects.get(id=room_id)
-        room.likeroom.add(request.user)
+        
+        
+        if room.likeroom.all().contains(request.user):
+            room.likeroom.remove(request.user)
+            
+            like='Like'
+        else:
+            room.likeroom.add(request.user)
+            like='Unlike'
+
         likecount=room.likeroom.count()
-        return HttpResponse(likecount)
+        data={
+            'likecount':likecount,
+            'liked_room':like
+        }
+        
+        return JsonResponse(data)
+    

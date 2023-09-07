@@ -44,8 +44,15 @@
       </a>
       {% if request.user.is_authenticated %}
 
-        <b class="likeroombutton" type="submit" value="Like" name="like" data-catid="{{ room.id }}">Like</b>
+        <b class="likeroombutton" type="submit" value="Like" name="like" data-catid="{{ room.id }}" id="like{{room.id}}">
+          {% if request.user in room.likeroom.all %}
+          Unlike
+          {% else %}
+          Like
+          {% endif %}
+        </b>
       <a id="message{{room.id}}">{{room.likeroom.all.count}}</a>
+       
 
       {% endif %}
     </div>
@@ -65,7 +72,8 @@
           data:{room_id:catid},
           success: function(data)
           {
-            $( '#message'+ catid ).text(data);
+            $( '#message'+ catid ).text(data.likecount);
+            $( '#like'+ catid ).text(data.liked_room);
           }
         })
     })
