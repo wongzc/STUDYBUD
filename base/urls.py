@@ -21,4 +21,5 @@ urlpatterns = [
     path('activity/', views.activityPage, name="activity"),
 
     path('likeroom', views.likeRoom, name="likeroom"),
+    path('likemessage', views.likeMessage, name="likemessage"),
 ]

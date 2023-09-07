@@ -226,10 +226,8 @@ def likeRoom(request):
         room_id=request.GET['room_id']
         room=Room.objects.get(id=room_id)
         
-        
         if room.likeroom.all().contains(request.user):
-            room.likeroom.remove(request.user)
-            
+            room.likeroom.remove(request.user)          
             like='Like'
         else:
             room.likeroom.add(request.user)
@@ -239,6 +237,27 @@ def likeRoom(request):
         data={
             'likecount':likecount,
             'liked_room':like
+        }
+        
+        return JsonResponse(data)
+    
+def likeMessage(request):
+    
+    if request.method=='GET':
+        message_id=request.GET['message_id']
+        message=Message.objects.get(id=message_id)
+        
+        if message.likemessage.all().contains(request.user):
+            message.likemessage.remove(request.user)          
+            like='Like'
+        else:
+            message.likemessage.add(request.user)
+            like='Unlike'
+
+        likecount=message.likemessage.count()
+        data={
+            'likecount':likecount,
+            'liked_message':like
         }
         
         return JsonResponse(data)

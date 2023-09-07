@@ -43,7 +43,6 @@
         {{room.participants.all.count}}
       </a>
       {% if request.user.is_authenticated %}
-
         <b class="likeroombutton" type="submit" value="Like" name="like" data-catid="{{ room.id }}" id="like{{room.id}}">
           {% if request.user in room.likeroom.all %}
           Unlike
@@ -52,9 +51,11 @@
           {% endif %}
         </b>
       <a id="message{{room.id}}">{{room.likeroom.all.count}}</a>
-       
-
       {% endif %}
+      <a href="{% url 'room' room.id %}" class="roomListRoom__joined">
+        Comment
+        {{room.message_set.count}}
+      </a>
     </div>
       <p class="roomListRoom__topic">{{room.topic.name}}</p>
     </div>
