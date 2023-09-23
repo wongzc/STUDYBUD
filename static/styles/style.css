@@ -198,6 +198,7 @@ a {
   right: 3.5px;
 }
 
+
 .scroll::-webkit-scrollbar {
   width: 0.6rem;
   background-color: rgb(41, 41, 46);
